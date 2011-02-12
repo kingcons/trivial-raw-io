@@ -20,21 +20,21 @@
 
   #+ccl
   (with-gensyms (old new bits cc-array)
-    `(rlet ((,old :termios)
-            (,new :termios))
-           (let ((,bits (logior #$ICANON #$ECHO #$ECHOE #$ECHOK #$ECHONL))
-                 (,cc-array (pref ,new :termios.c_cc)))
-             (unwind-protect
-                  (progn
-                    ; Ensure that we actually store the original value.
-                    (#_tcgetattr 0 ,old)
-                    (setf (pref ,new :termios.c_lflag)
-                          (logandc2 (pref ,old :termios.c_lflag) ,bits)
-                          (paref ,cc-array (:array :char) #$VMIN) ,vmin
-                          (paref ,cc-array (:array :char) #$VTIME) ,vtime)
-                    (#_tcsetattr 0 #$TCSADRAIN ,new)
-                    ,@body)
-               (#_tcsetattr 0 #$TCSADRAIN ,old)))))
+    `(ccl:rlet ((,old :termios)
+                (,new :termios))
+               (let ((,bits (logior #$ICANON #$ECHO #$ECHOE #$ECHOK #$ECHONL))
+                     (,cc-array (ccl:pref ,new :termios.c_cc)))
+                 (unwind-protect
+                      (progn
+                        ; Ensure that we actually store the original value.
+                        (#_tcgetattr 0 ,old)
+                        (setf (ccl:pref ,new :termios.c_lflag)
+                              (logandc2 (ccl:pref ,old :termios.c_lflag) ,bits)
+                              (ccl:paref ,cc-array (:array :char) #$VMIN) ,vmin
+                              (ccl:paref ,cc-array (:array :char) #$VTIME) ,vtime)
+                        (#_tcsetattr 0 #$TCSADRAIN ,new)
+                        ,@body)
+                   (#_tcsetattr 0 #$TCSADRAIN ,old)))))
 
   #+ecl
   ()
