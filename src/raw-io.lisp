@@ -62,9 +62,9 @@
 
   #+clisp
   ;; Thanks to Pascal Bourguignon
-  (ext:with-keyboard
-    (system::input-character-char
-     ,@body)))
+  `(ext:with-keyboard
+     (system::input-character-char
+       ,@body)))
 
 (defun get-char (&optional (stream *query-io*))
   (with-raw-io ()
