@@ -1,0 +1,6 @@
+*** TODO
+* Support keys like Alt/Control/Arrows, etc. see:
+-- http://unixwiz.net/techtips/termios-vmin-vtime.html
+-- http://book.chinaunix.net/special/ebook/addisonWesley/APUE2/0201433079/ch18lev1sec11.html
+* Add a with-terminal/raw-io macro which executes body instead of READ-CHAR
+* Package it up nicely, give it an asd definition, put it on github.
