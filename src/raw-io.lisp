@@ -1,6 +1,12 @@
 (in-package :trivial-raw-io)
 
+;; For an explanation of VMIN and VTIME, see
+;;
+;; http://www.unixwiz.net/techtips/termios-vmin-vtime.html
 (defmacro with-raw-io ((&key (vmin 1) (vtime 0)) &body body)
+  "Execute BODY without echoing input IO actions."
+  (declare (ignorable vmin vtime))
+  
   #+sbcl
   ;; Thanks to Thomas F. Burdick
   (with-gensyms (old new bits)
@@ -66,9 +72,28 @@
      (system::input-character-char
        ,@body)))
 
-(defun get-char (&optional (stream *query-io*))
+(defun read-char (&optional (stream *query-io*)
+                            (eof-error-p t)
+                            eof-value
+                            recursive-p)
+  "Read a single character without echoing it from stream STREAM."
+  (declare (ignorable stream))
   (with-raw-io ()
-    #+clisp
-    (read-char ext:*keyboard-input*)
-    #-clisp
-    (read-char stream)))
+    (cl:read-char #+clisp ext:*keyboard-inpit*
+                  #-clisp stream
+                  eof-error-p
+                  eof-value
+                  recursive-p)))
+
+(defun read-line (&optional (stream *query-io*)
+                            (eof-error-p t)
+                            eof-value
+                            recursive-p)
+  "Read a line without echoing it from stream STREAM."
+  (declare (ignorable stream))
+  (with-raw-io ()
+    (cl:read-line #+clisp ext:*keyboard-inpit*
+                  #-clisp stream
+                  eof-error-p
+                  eof-value
+                  recursive-p)))

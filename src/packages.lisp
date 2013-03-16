@@ -1,4 +1,8 @@
 (defpackage :trivial-raw-io
   (:use :cl)
   (:import-from :alexandria #:with-gensyms)
-  (:export #:with-raw-io))
+  (:shadow #:read-char
+           #:read-line)
+  (:export #:with-raw-io
+           #:read-char
+           #:read-line))
