@@ -6,7 +6,7 @@
 (defmacro with-raw-io ((&key (vmin 1) (vtime 0)) &body body)
   "Execute BODY without echoing input IO actions."
   (declare (ignorable vmin vtime))
-  
+
   #+sbcl
   ;; Thanks to Thomas F. Burdick
   (with-gensyms (old new bits)
@@ -79,7 +79,7 @@
   "Read a single character without echoing it from stream STREAM."
   (declare (ignorable stream))
   (with-raw-io ()
-    (cl:read-char #+clisp ext:*keyboard-inpit*
+    (cl:read-char #+clisp ext:*keyboard-input*
                   #-clisp stream
                   eof-error-p
                   eof-value
@@ -92,7 +92,7 @@
   "Read a line without echoing it from stream STREAM."
   (declare (ignorable stream))
   (with-raw-io ()
-    (cl:read-line #+clisp ext:*keyboard-inpit*
+    (cl:read-line #+clisp ext:*keyboard-input*
                   #-clisp stream
                   eof-error-p
                   eof-value
